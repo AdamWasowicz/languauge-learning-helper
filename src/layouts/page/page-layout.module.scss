@@ -3,5 +3,8 @@
     min-height: 100vh;
 
     // Background
-    background-color: gray;
+    background-color: var(--comp-600);
+
+    // Text
+    color: var(--secondary-200);
 }

@@ -1,0 +1,26 @@
+.root {
+    // Size and Position
+    padding: 24px;
+
+    // Background
+    outline: 0;
+    border: 2px solid var(--accent-300);
+    background-color: var(--comp-400);
+
+    // Text
+    font-size: 24px;
+    color: var(--accent-300);
+    letter-spacing: 2px;
+
+    &:hover {
+        // Backround
+        background-color: var(--comp-300);
+        border-color: var(--accent-200);;
+
+        // Text
+        color: var(--accent-200);
+
+        // Other
+        cursor: pointer;
+    }
+}

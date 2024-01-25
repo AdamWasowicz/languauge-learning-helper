@@ -1,0 +1,101 @@
+.root {
+    // Size and Position
+    width: 800px;
+    height: 300px;
+    padding: 16px;
+
+    // Flex
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    row-gap: 24px;
+
+    // Background
+    background-color: var(--primary-700);
+    border: 2px solid var(--primary-500);
+    border-radius: 10px;
+
+    // Text
+    text-align: center;
+}
+
+.button {
+    // Size and Position
+    min-width: 250px;
+    width: fit-content;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 16px 24px;
+
+    // Background
+    background-color: var(--secondary-800);
+    border: 2px solid var(--secondary-200);
+    border-radius: 25px;
+
+    // Text
+    text-align: center;
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: var(--secondary-200);
+
+    &:hover {
+        // Other
+        cursor: pointer;
+
+        // Background
+        background-color: var(--primary-600);
+        border: 2px solid var(--accent-200);
+
+        //Text
+        color: var(--accent-200);
+    }
+}
+
+.content {
+    // Size and Position
+    height: 60%;
+
+    // Flex
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    column-gap: 4%;
+}
+
+.column {
+    // Size and Position
+    padding: 12px;
+
+    // Flex
+    display: flex;
+    flex-direction: column;
+    width: 40%;
+    justify-content: center;
+
+    // Background
+    background-color: var(--secondary-800);
+    border: 2px solid var(--secondary-500);
+
+    // Text
+    font-size: 16px;
+    color: var(--secondary-200);
+}
+
+.span_column {
+    // Size and Position
+    width: 10%;
+
+    // Flex
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    // Text
+    font-size: 64px;
+    color: var(--accent-400);
+}
+
+.p {
+    // Text
+    font-size: 24px;
+}

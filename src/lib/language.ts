@@ -4,6 +4,35 @@ import { PATH_TO_VOCABULARY, PATH_TO_SENTENCES } from './pathfinder';
 import path from 'path';
 import { VOCABULARY_SEPARATOR, SENCENCE_SEPARATOR } from "./settings";
 
+const _getAllFromTranslationsFromFile = (pathToDirectory: string[], sepatator: string): Translation[] => {
+    const allFileNames: string[] = getAllFileNamesInDirectory(path.join(process.cwd(), ...pathToDirectory))
+    let vocabulary: Translation[] = [];
+
+    allFileNames.forEach((fileName) => {
+        const pathToFile = path.join(process.cwd(),...pathToDirectory, fileName)
+
+        const fileContent = readTxt(pathToFile);
+        if (fileContent === undefined) { return; }
+
+        const linesInFile = fileContent?.split('\n');
+        const translations: Translation[] = linesInFile.map((line) => {
+            const split = line.split(VOCABULARY_SEPARATOR);
+            if (split.length !== 2) {
+                throw new Error(`[getAllFromTranslationsFromFile] line: "${line}" from file: "${fileName}" cannot be split using separator: "${sepatator}"`)
+            }
+
+            return {
+                original: split[0].trim(),
+                translation: split[1].trim()
+            } satisfies Translation
+        })
+
+        vocabulary = [...vocabulary, ...translations];
+    })
+
+    return vocabulary
+}
+
 export const getAllVocabulary = (): Translation[] => {
     const allFileNames: string[] = getAllFileNamesInDirectory(path.join(process.cwd(),...PATH_TO_VOCABULARY))
     let vocabulary: Translation[] = [];
@@ -60,4 +89,14 @@ export const getAllSentences = (): Translation[] => {
     })
 
     return sentences
+}
+
+export const getAllVocabularyFileNames = (): string[] => {
+    const allFileNames: string[] = getAllFileNamesInDirectory(path.join(process.cwd(),...PATH_TO_VOCABULARY))
+    return allFileNames
+}
+
+export const getAllSentencesFileNames = (): string[] => {
+    const allFileNames: string[] = getAllFileNamesInDirectory(path.join(process.cwd(),...PATH_TO_SENTENCES))
+    return allFileNames
 }

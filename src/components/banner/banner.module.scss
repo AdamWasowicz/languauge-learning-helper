@@ -1,0 +1,26 @@
+.root {
+    // Size and Position
+    width: 100%;
+    padding: 18px;
+
+    // Background
+    background-color: var(--comp-500);
+    border-bottom: 1px solid var(--comp-300);
+}
+
+.h1 {
+    // Text
+    color: var(--accent-400);
+    letter-spacing: 2px;
+
+    &:hover {
+        // Text
+        color: var(--accent-200);
+    }
+}
+
+.link {
+    // Text
+    text-decoration: none;
+    color: inherit;
+}
