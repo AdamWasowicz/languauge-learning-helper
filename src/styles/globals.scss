@@ -4,6 +4,17 @@
   box-sizing: border-box;
 }
 
+body {
+  // Size and Position
+  min-height: 100vh;
+
+  // Background
+  background-color: var(--comp-600);
+
+  // Text
+  color: var(--secondary-200);
+}
+
 :root {
   --black: #000000;
 
@@ -38,6 +49,12 @@
   --comp-400: #163c5e;
   --comp-300: #45637e;
   --comp-200: #738a9e;
+}
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
 }
 
 a {

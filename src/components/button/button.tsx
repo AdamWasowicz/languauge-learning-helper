@@ -4,14 +4,15 @@ import styles from './button.module.scss';
 interface IButton {
     onClick?: () => void,
     children: string | JSX.Element | JSX.Element[]
-    disabled?: boolean
+    disabled?: boolean,
+    className?: string
 }
 
 const Button: React.FC<IButton> = (props) => {
 
     return (
         <button 
-            className={styles.root}
+            className={styles.root + " " + props.className}
             onClick={props.onClick}
             disabled={props.disabled ?? false}
         >

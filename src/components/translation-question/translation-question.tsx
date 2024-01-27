@@ -6,10 +6,13 @@ import { useState } from 'react';
 
 interface ITranslationQuestion {
     translationObj: Translation,
-    onQuestionFinished: () => void
+    onQuestionFinished: () => void,
+    fieldsReveresed?: boolean
 }
 
 const TranslationQuestion: React.FC<ITranslationQuestion> = (props) => {
+    const reverse = props.fieldsReveresed ?? false;
+
     const [showTranslation, setShowTranslation] = useState<boolean>(false);
 
     const handleButtonClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -29,7 +32,7 @@ const TranslationQuestion: React.FC<ITranslationQuestion> = (props) => {
             <div className={styles.content}>
                 <div className={styles.column}>
                     <p className={styles.p}>
-                        { props.translationObj.original }
+                        { reverse ? props.translationObj.translation:  props.translationObj.original }
                     </p>
                 </div>
 
@@ -42,7 +45,7 @@ const TranslationQuestion: React.FC<ITranslationQuestion> = (props) => {
                         className={styles.p}
                         hidden={!showTranslation}
                     >
-                        { props.translationObj.translation }
+                        { reverse ? props.translationObj.original :  props.translationObj.translation }
                     </p>
                 </div>
             </div>

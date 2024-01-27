@@ -1,5 +1,5 @@
 import { getVocabularyFromFile } from "@/src/lib/language";
-import VocabularyPage from "@/src/pages/vocabulary/vocabulary";
+import TranslationExercisePage from "@/src/pages/translation-exercise/translation-exercise";
 import { getAllVocabularyFileNames } from "@/src/lib/language";
 import { randomizeArray } from "@/src/lib/utils";
 
@@ -12,7 +12,7 @@ const Page: React.FC<IPage> = (props) => {
     if (translations === undefined) { return (<h1>Redirect to error page or something</h1>) }
 
     const randomizedTranslations = randomizeArray(translations);
-    return (<VocabularyPage fileName={props.params.file} translations={randomizedTranslations}/>)
+    return (<TranslationExercisePage fileName={props.params.file} translations={randomizedTranslations}/>)
 }
 
 export default Page;
