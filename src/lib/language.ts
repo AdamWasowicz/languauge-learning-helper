@@ -1,10 +1,26 @@
 import { Translation } from "../models/language";
-import { getAllFileNamesInDirectory, readTxt } from './utils';
+import { getAllFileNamesInDirectory, readTxt, doesFileExist,  } from './utils';
 import { PATH_TO_VOCABULARY, PATH_TO_SENTENCES } from './pathfinder';
 import path from 'path';
 import { VOCABULARY_SEPARATOR, SENCENCE_SEPARATOR } from "./settings";
 
-const _getAllFromTranslationsFromFile = (pathToDirectory: string[], sepatator: string): Translation[] => {
+// Private
+const _convertStringToTranslation = (content: string, separator: string): Translation[] => {
+    const linesInFile = content.split('\n');
+
+    const translations: Translation[] = linesInFile.map((line) => {
+        const split = line.split(VOCABULARY_SEPARATOR);
+        if (split.length !== 2) {
+            throw new Error(`[_convertStringToTranslation] line: "${line}" cannot be split using separator: "${separator}"`)
+        }
+
+        return { original: split[0].trim(), translation: split[1].trim() } satisfies Translation
+    })
+
+    return translations;
+}
+
+const _getAllFromTranslationsFromFile = (pathToDirectory: string[], separator: string): Translation[] => {
     const allFileNames: string[] = getAllFileNamesInDirectory(path.join(process.cwd(), ...pathToDirectory))
     let vocabulary: Translation[] = [];
 
@@ -14,81 +30,30 @@ const _getAllFromTranslationsFromFile = (pathToDirectory: string[], sepatator: s
         const fileContent = readTxt(pathToFile);
         if (fileContent === undefined) { return; }
 
-        const linesInFile = fileContent?.split('\n');
-        const translations: Translation[] = linesInFile.map((line) => {
-            const split = line.split(VOCABULARY_SEPARATOR);
-            if (split.length !== 2) {
-                throw new Error(`[getAllFromTranslationsFromFile] line: "${line}" from file: "${fileName}" cannot be split using separator: "${sepatator}"`)
-            }
-
-            return {
-                original: split[0].trim(),
-                translation: split[1].trim()
-            } satisfies Translation
-        })
-
-        vocabulary = [...vocabulary, ...translations];
+        vocabulary = [...vocabulary, ..._convertStringToTranslation(fileContent, separator)];
     })
 
     return vocabulary
+}
+
+// Export
+export const getVocabularyFromFile = (fileName: string): Translation[] | undefined => {
+    const fileExists = doesFileExist(path.join(process.cwd(),...PATH_TO_VOCABULARY))
+    if (fileExists === false) { return undefined }
+
+    const fileContent = readTxt(path.join(process.cwd(), ...PATH_TO_VOCABULARY, fileName))
+    if (fileContent === undefined) { return undefined }
+
+    const tranlations = _convertStringToTranslation(fileContent, VOCABULARY_SEPARATOR);
+    return tranlations;
 }
 
 export const getAllVocabulary = (): Translation[] => {
-    const allFileNames: string[] = getAllFileNamesInDirectory(path.join(process.cwd(),...PATH_TO_VOCABULARY))
-    let vocabulary: Translation[] = [];
-
-    allFileNames.forEach((fileName) => {
-        const pathToFile = path.join(process.cwd(),...PATH_TO_VOCABULARY, fileName)
-
-        const fileContent = readTxt(pathToFile);
-        if (fileContent === undefined) { return; }
-
-        const linesInFile = fileContent?.split('\n');
-        const translations: Translation[] = linesInFile.map((line) => {
-            const split = line.split(VOCABULARY_SEPARATOR);
-            if (split.length !== 2) {
-                throw new Error(`[getAllVocabulary] line: "${line}" from file: "${fileName}" cannot be split using separator: "${VOCABULARY_SEPARATOR}"`)
-            }
-
-            return {
-                original: split[0].trim(),
-                translation: split[1].trim()
-            } satisfies Translation
-        })
-
-        vocabulary = [...vocabulary, ...translations];
-    })
-
-    return vocabulary
+    return _getAllFromTranslationsFromFile(PATH_TO_VOCABULARY, VOCABULARY_SEPARATOR);
 }
 
 export const getAllSentences = (): Translation[] => {
-    const allFileNames: string[] = getAllFileNamesInDirectory(path.join(process.cwd(),...PATH_TO_SENTENCES))
-    let sentences: Translation[] = [];
-
-    allFileNames.forEach((fileName) => {
-        const pathToFile = path.join(process.cwd(),...PATH_TO_SENTENCES, fileName)
-
-        const fileContent = readTxt(pathToFile);
-        if (fileContent === undefined) { return; }
-
-        const linesInFile = fileContent?.split('\n');
-        const translations: Translation[] = linesInFile.map((line) => {
-            const split = line.split(SENCENCE_SEPARATOR);
-            if (split.length !== 2) {
-                throw new Error(`[getAllSentences] line: "${line}" from file: "${fileName}" cannot be split using separator: "${SENCENCE_SEPARATOR}"`)
-            }
-
-            return {
-                original: split[0].trim(),
-                translation: split[1].trim()
-            } satisfies Translation
-        })
-
-        sentences = [...sentences, ...translations];
-    })
-
-    return sentences
+    return _getAllFromTranslationsFromFile(PATH_TO_SENTENCES, SENCENCE_SEPARATOR);
 }
 
 export const getAllVocabularyFileNames = (): string[] => {

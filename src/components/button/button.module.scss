@@ -24,3 +24,18 @@
         cursor: pointer;
     }
 }
+
+.link_button {
+    @extend .root;
+
+    // Size and Position
+    padding: 0;
+
+    & > a {
+        // Size and Position
+        width: 100%;
+        height: 100%;
+        padding: 24px;
+        display: block;
+    }
+}

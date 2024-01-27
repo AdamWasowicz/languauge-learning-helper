@@ -1,0 +1,36 @@
+.root {
+    // Size and Position
+    padding: 18px;
+}
+
+.list {
+    // List
+    list-style: none;
+}
+
+.list_element {
+    // Size and Position
+    margin: 12px 0px;
+
+    // Background
+    background-color: var(--primary-700);
+    border: 2px solid var(--primary-500);
+
+    &:hover {
+        // Background
+        background-color: var(--primary-600);
+        border: 2px solid var(--primary-400);
+    }
+
+    & > a {
+        // Size and Position
+        padding: 12px 24px;
+        width: 100%;
+        height: 100%;
+        display: block;
+
+        // Text
+        font-size: 24px;
+        letter-spacing: 2px;
+    }
+}

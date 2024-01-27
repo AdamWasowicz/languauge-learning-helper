@@ -3,7 +3,7 @@
 import styles from './home.module.scss';
 import PageLayout from '@/src/layouts/page/page-layout';
 import Banner from '@/src/components/banner/banner';
-import Button from '@/src/components/button/button';
+import Button, { LinkButton } from '@/src/components/button/button';
 import Link from 'next/link';
 
 const HomePage: React.FC = () => {
@@ -11,13 +11,9 @@ const HomePage: React.FC = () => {
         <PageLayout>
             <Banner/>
             
-            <h1>Home Page</h1>
-
-            <Button>
-                <Link href="/vocabulary">
-                    Go to test page   
-                </Link>
-            </Button>
+            <div className={styles.root}>
+                <LinkButton href="/vocabulary"> Go to vocabulary file selection</LinkButton>
+            </div>
         </PageLayout>
     )
 }

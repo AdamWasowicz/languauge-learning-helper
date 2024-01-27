@@ -8,6 +8,7 @@ import { useState } from 'react';
 import Banner from '@/src/components/banner/banner';
 
 interface IVocabularyPage {
+    fileName?: string,
     translations: Translation[]
 }
 
@@ -23,8 +24,9 @@ const VocabularyPage: React.FC<IVocabularyPage> = (props) => {
     return (
         <PageLayout>
             <Banner/>
-
             <div className={styles.root}>
+                { props.fileName && <h2 className={styles.current_file}>Current file: {props.fileName}</h2> }
+
                 <div className={styles.content}>
                     <h1>{ currentQuestionIndex + 1 + " / " + translations.length}</h1>
                     
