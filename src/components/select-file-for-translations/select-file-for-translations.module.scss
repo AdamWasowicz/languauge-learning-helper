@@ -1,4 +1,15 @@
+.h2 {
+    // Text
+    font-size: 48px;
+    font-weight: 400;
+    color: var(--accent-400);
+    letter-spacing: 2px;
+}
+
 .list {
+    // Size and Position
+    margin-bottom: 24px;
+     
     // List
     list-style: none;
 }

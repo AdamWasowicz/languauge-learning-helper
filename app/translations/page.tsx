@@ -1,2 +1,2 @@
-import SelectTranslationExercisePage from "@/src/pages/select-translation-exercise/select-translation-exercise";
+import SelectTranslationExercisePage from "./vocabulary/page";
 export default SelectTranslationExercisePage;

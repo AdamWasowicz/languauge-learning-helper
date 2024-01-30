@@ -51,13 +51,23 @@ body {
   --comp-200: #738a9e;
 }
 
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+// Global classes
 .center {
   margin-left: auto;
   margin-right: auto;
   text-align: center;
 }
 
-a {
-  text-decoration: none;
-  color: inherit;
+.flex_column_space_between {
+  // Size and Position
+  height: 100vh;
+
+  // Flex
+  display: flex;
+  flex-direction: column;
 }

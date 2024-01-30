@@ -2,7 +2,7 @@ import { Translation } from "../models/language";
 import { getAllFileNamesInDirectory, readTxt, doesFileExist,  } from './utils';
 import { PATH_TO_VOCABULARY, PATH_TO_SENTENCES } from './pathfinder';
 import path from 'path';
-import { VOCABULARY_SEPARATOR, SENCENCE_SEPARATOR } from "./settings";
+import { VOCABULARY_SEPARATOR, SENTENCE_SEPARATOR } from "./settings";
 
 // Private
 const _convertStringToTranslation = (content: string, separator: string): Translation[] => {
@@ -48,12 +48,23 @@ export const getVocabularyFromFile = (fileName: string): Translation[] | undefin
     return tranlations;
 }
 
+export const getSentencesFromFile = (fileName: string): Translation[] | undefined => {
+    const fileExists = doesFileExist(path.join(process.cwd(),...PATH_TO_SENTENCES))
+    if (fileExists === false) { return undefined }
+
+    const fileContent = readTxt(path.join(process.cwd(), ...PATH_TO_SENTENCES, fileName))
+    if (fileContent === undefined) { return undefined }
+
+    const tranlations = _convertStringToTranslation(fileContent, SENTENCE_SEPARATOR);
+    return tranlations;
+}
+
 export const getAllVocabulary = (): Translation[] => {
     return _getAllFromTranslationsFromFile(PATH_TO_VOCABULARY, VOCABULARY_SEPARATOR);
 }
 
 export const getAllSentences = (): Translation[] => {
-    return _getAllFromTranslationsFromFile(PATH_TO_SENTENCES, SENCENCE_SEPARATOR);
+    return _getAllFromTranslationsFromFile(PATH_TO_SENTENCES, SENTENCE_SEPARATOR);
 }
 
 export const getAllVocabularyFileNames = (): string[] => {

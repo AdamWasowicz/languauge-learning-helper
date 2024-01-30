@@ -9,9 +9,19 @@ interface ISelectFileForTranslations {
 }
 
 const SelectFileForTranslations: React.FC<ISelectFileForTranslations> = (props) => {
+    // If no fileNames were pased
+    if (props.fileNames.length === 0) {
+        return (
+            <div className={styles.root}>
+                <h2 className={styles.h2}>{props.label}</h2>
+                <p>No files found</p>
+            </div>
+        )
+    }
+
     return (
         <div className={styles.root}>
-            <h2>{props.label}</h2>
+            <h2 className={styles.h2}>{props.label}</h2>
 
             <ul className={styles.list}>
                     {

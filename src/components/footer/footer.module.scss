@@ -1,0 +1,14 @@
+.footer {
+    box-sizing: border-box;
+    // Size and Position
+    width: 100%;
+    height: 38px;
+
+    padding: 8px 12px;
+    // Background
+    background-color: var(--comp-400);
+    border-top: 2px solid var(--comp-300);
+    
+    // Text
+    text-align: center;
+}
