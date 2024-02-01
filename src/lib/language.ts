@@ -1,8 +1,8 @@
 import { Translation } from "../models/language";
-import { getAllFileNamesInDirectory, readTxt, doesFileExist,  } from './utils';
+import { getAllFileNamesInDirectory, readTxt, doesFileExist, saveJson, saveArrayToFile, deleteFile,  } from './utils';
 import { PATH_TO_VOCABULARY, PATH_TO_SENTENCES } from './pathfinder';
 import path from 'path';
-import { VOCABULARY_SEPARATOR, SENTENCE_SEPARATOR } from "./settings";
+import { VOCABULARY_SEPARATOR, SENTENCE_SEPARATOR, CONVERT_INDICATOR, CONVERT_ENABLED } from "./settings";
 
 // Private
 const _convertStringToTranslation = (content: string, separator: string): Translation[] => {
@@ -34,6 +34,32 @@ const _getAllFromTranslationsFromFile = (pathToDirectory: string[], separator: s
     })
 
     return vocabulary
+}
+
+const _convertFileToTranslationFormat = (absolutePath: string, separator: string): Translation[] | undefined => {
+    const fileExists = doesFileExist(absolutePath);
+    if (fileExists === false) { return undefined; }
+
+    const fileContent = readTxt(absolutePath);
+    if (fileContent === undefined) { return undefined; }
+
+    // Read and format file content
+    const parts = fileContent
+        ?.split('\n')
+        .filter((item) => (item !== '') ? true : false)
+        .filter((item) => (item !== ' 	') ? true : false)
+
+    // Map
+    const parts_length = parts.length;
+    const trans = Array<Translation>(parts_length);
+    for (let i = 0; i < parts_length; i = i + 2) {
+        trans[i / 2] = {
+            original: parts[i + 1],
+            translation: parts[i]
+        } satisfies Translation
+    }
+    
+    return trans;
 }
 
 // Export
@@ -75,4 +101,30 @@ export const getAllVocabularyFileNames = (): string[] => {
 export const getAllSentencesFileNames = (): string[] => {
     const allFileNames: string[] = getAllFileNamesInDirectory(path.join(process.cwd(),...PATH_TO_SENTENCES))
     return allFileNames
+}
+
+export const convertVocabularyFilesToTranslationFormat = () => {
+    if (CONVERT_ENABLED === false) { return }
+
+    const allFileNamesForConvertion = getAllFileNamesInDirectory(path.join(process.cwd(), ...PATH_TO_VOCABULARY));
+    const filteredFileNames = allFileNamesForConvertion.filter((item) => item.split('.')[1] === CONVERT_INDICATOR)
+    
+    filteredFileNames.forEach((item) => {
+        const t = _convertFileToTranslationFormat(
+            path.join(process.cwd(), ...PATH_TO_VOCABULARY, item),
+            VOCABULARY_SEPARATOR
+        )
+        if (t === undefined) { return; }
+
+        const fileName = item.split('.')[0] + "." + item.split('.')[2];
+        let d = t.map((item) =>`${item.translation} = ${item.original}\n`)
+            .reduce((prev, curr) => prev + curr)
+        d = d.substring(0, d.length - 1);
+
+        const p = path.join(process.cwd(),...PATH_TO_VOCABULARY, fileName)
+        const po = path.join(process.cwd(),...PATH_TO_VOCABULARY, item)
+
+        saveArrayToFile(d, p)
+        deleteFile(po);
+    })
 }

@@ -64,6 +64,10 @@ export const saveJson = (data: object, absolutePath: string) => {
     fs.writeFileSync(absolutePath, json, 'utf8')
 }
 
+export const saveArrayToFile = (data: string, absolutePath: string) => {
+    fs.writeFileSync(absolutePath, data, 'utf-8');
+}
+
 export const randomizeArray = (items: any[]): any[] =>{
     let currentIndex = items.length,  randomIndex;
 
@@ -78,4 +82,8 @@ export const randomizeArray = (items: any[]): any[] =>{
     }
 
     return items;
+}
+
+export const deleteFile = (absolutePath: string) => {
+    fs.rmSync(absolutePath);
 }
