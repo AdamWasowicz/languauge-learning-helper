@@ -35,7 +35,11 @@ export const LinkButton: React.FC<ILinkButton> = (props) => {
             className={styles.link_button}
             disabled={props.disabled ?? false}
         >
-            <Link href={props.href}>{ props.children }</Link>
+            {
+                props.disabled
+                ? <p>{props.children}</p>
+                : <Link href={props.href}>{ props.children }</Link>
+            }
         </button>
     )
 }

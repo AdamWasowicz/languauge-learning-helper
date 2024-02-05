@@ -20,6 +20,18 @@ const _convertStringToTranslation = (content: string, separator: string): Transl
     return translations;
 }
 
+const _getTranlationsFromFiles = (absolutePaths: string[], separator: string): Translation[] => {
+    const trans = absolutePaths.map((file) => {
+        const fileContent = readTxt(file)
+        if (fileContent === undefined) { return [] }
+
+        const tranlations = _convertStringToTranslation(fileContent, VOCABULARY_SEPARATOR);
+        return tranlations;
+    })
+
+    return trans.flat();
+}
+
 const _getAllFromTranslationsFromFile = (pathToDirectory: string[], separator: string): Translation[] => {
     const allFileNames: string[] = getAllFileNamesInDirectory(path.join(process.cwd(), ...pathToDirectory))
     let vocabulary: Translation[] = [];
@@ -62,6 +74,7 @@ const _convertFileToTranslationFormat = (absolutePath: string, separator: string
     return trans;
 }
 
+
 // Export
 export const getVocabularyFromFile = (fileName: string): Translation[] | undefined => {
     const fileExists = doesFileExist(path.join(process.cwd(),...PATH_TO_VOCABULARY))
@@ -74,6 +87,15 @@ export const getVocabularyFromFile = (fileName: string): Translation[] | undefin
     return tranlations;
 }
 
+export const getVocabularyFromFiles = (fileNames: string[]): Translation[] | undefined => {
+    const fNames = fileNames.map((item) => {
+        return path.join(process.cwd(), ...PATH_TO_VOCABULARY, item)
+    })
+
+    const trans = _getTranlationsFromFiles(fNames, VOCABULARY_SEPARATOR)
+    return trans;
+}
+
 export const getSentencesFromFile = (fileName: string): Translation[] | undefined => {
     const fileExists = doesFileExist(path.join(process.cwd(),...PATH_TO_SENTENCES))
     if (fileExists === false) { return undefined }
@@ -83,6 +105,15 @@ export const getSentencesFromFile = (fileName: string): Translation[] | undefine
 
     const tranlations = _convertStringToTranslation(fileContent, SENTENCE_SEPARATOR);
     return tranlations;
+}
+
+export const getSentencesFromFiles = (fileNames: string[]): Translation[] | undefined => {
+    const fNames = fileNames.map((item) => {
+        return path.join(process.cwd(), ...PATH_TO_SENTENCES, item)
+    })
+
+    const trans = _getTranlationsFromFiles(fNames, SENTENCE_SEPARATOR)
+    return trans;
 }
 
 export const getAllVocabulary = (): Translation[] => {
