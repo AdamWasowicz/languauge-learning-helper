@@ -64,7 +64,7 @@ export const saveJson = (data: object, absolutePath: string) => {
     fs.writeFileSync(absolutePath, json, 'utf8')
 }
 
-export const saveArrayToFile = (data: string, absolutePath: string) => {
+export const saveStringToFile = (data: string, absolutePath: string) => {
     fs.writeFileSync(absolutePath, data, 'utf-8');
 }
 

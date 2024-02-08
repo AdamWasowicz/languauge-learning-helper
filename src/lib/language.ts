@@ -1,6 +1,6 @@
 import { Translation } from "../models/language";
-import { getAllFileNamesInDirectory, readTxt, doesFileExist, saveJson, saveArrayToFile, deleteFile,  } from './utils';
-import { PATH_TO_VOCABULARY, PATH_TO_SENTENCES } from './pathfinder';
+import { getAllFileNamesInDirectory, readTxt, doesFileExist, saveJson, saveStringToFile, deleteFile,  } from './utils';
+import { PATH_TO_VOCABULARY, PATH_TO_SENTENCES, PATH_TO_SPECIAL } from './pathfinder';
 import path from 'path';
 import { VOCABULARY_SEPARATOR, SENTENCE_SEPARATOR, CONVERT_INDICATOR, CONVERT_ENABLED } from "./settings";
 
@@ -32,7 +32,7 @@ const _getTranlationsFromFiles = (absolutePaths: string[], separator: string): T
     return trans.flat();
 }
 
-const _getAllFromTranslationsFromFile = (pathToDirectory: string[], separator: string): Translation[] => {
+const _getAllTranslationsFromDirectory = (pathToDirectory: string[], separator: string): Translation[] => {
     const allFileNames: string[] = getAllFileNamesInDirectory(path.join(process.cwd(), ...pathToDirectory))
     let vocabulary: Translation[] = [];
 
@@ -117,11 +117,11 @@ export const getSentencesFromFiles = (fileNames: string[]): Translation[] | unde
 }
 
 export const getAllVocabulary = (): Translation[] => {
-    return _getAllFromTranslationsFromFile(PATH_TO_VOCABULARY, VOCABULARY_SEPARATOR);
+    return _getAllTranslationsFromDirectory(PATH_TO_VOCABULARY, VOCABULARY_SEPARATOR);
 }
 
 export const getAllSentences = (): Translation[] => {
-    return _getAllFromTranslationsFromFile(PATH_TO_SENTENCES, SENTENCE_SEPARATOR);
+    return _getAllTranslationsFromDirectory(PATH_TO_SENTENCES, SENTENCE_SEPARATOR);
 }
 
 export const getAllVocabularyFileNames = (): string[] => {
@@ -155,7 +155,43 @@ export const convertVocabularyFilesToTranslationFormat = () => {
         const p = path.join(process.cwd(),...PATH_TO_VOCABULARY, fileName)
         const po = path.join(process.cwd(),...PATH_TO_VOCABULARY, item)
 
-        saveArrayToFile(d, p)
+        saveStringToFile(d, p)
         deleteFile(po);
     })
+}
+
+export const findDerDieDasAndDoSomethingIdontReallyCare = () => {
+    const allVocabulary: Translation[] = getAllVocabulary();
+
+    const filtered = allVocabulary.filter((item) => {
+        const split = item.original.split(' ');
+        return split.length === 2 && (split[0] === "der" || split[0] === "die" || split[0] === "das")
+    })
+
+    // Convert to string
+    let output: string = ""
+    for (let i = 0; i < filtered.length - 1; i++) {
+        output += `${filtered[i].original} ${VOCABULARY_SEPARATOR} ${filtered[i].translation}\n`
+    }
+    output += `${filtered[filtered.length - 1].original} ${VOCABULARY_SEPARATOR} ${filtered[filtered.length - 1].translation}`
+
+    // Save
+    saveStringToFile(output, path.join(process.cwd(), ...PATH_TO_SPECIAL, 'der_die_das.txt'))
+}
+
+export const getDerDieDas = (): Translation[] => {
+    const filePath = [path.join(process.cwd(), ...PATH_TO_SPECIAL, 'der_die_das.txt')]
+    const data = _getTranlationsFromFiles(filePath, VOCABULARY_SEPARATOR)
+    return data;
+}
+
+export const getSpecialsFromFiles = (fileNames: string[]): Translation[] => {
+    const aPaths = fileNames.map((item) => path.join(process.cwd(), ...PATH_TO_SPECIAL, item))
+    const data = _getTranlationsFromFiles(aPaths, VOCABULARY_SEPARATOR);
+    return data;
+}
+
+export const getAllSpecialFileNames = (): string[] => {
+    const data = getAllFileNamesInDirectory(path.join(process.cwd(), ...PATH_TO_SPECIAL));
+    return data;
 }

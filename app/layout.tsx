@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import "@/src/styles/globals.scss";
-import { convertVocabularyFilesToTranslationFormat } from "@/src/lib/language";
+import { convertVocabularyFilesToTranslationFormat, findDerDieDasAndDoSomethingIdontReallyCare } from "@/src/lib/language";
 
 convertVocabularyFilesToTranslationFormat();
+//findDerDieDasAndDoSomethingIdontReallyCare();
 
 export const metadata: Metadata = {
   title: "Create Next App",
